@@ -1,3 +1,14 @@
+# Allegro 4.2.2 (OpenWatcom v2 Support)
+========================================
+
+This fork of mine enables OpenWatcom v2 for building Allegro 4.2.2 with CMake crosscompiling, without needing a virtual machine or a Win9x machine to build it (it needs DOSBox-X to generate `asmdef.inc`)
+and no need for the flaky and unreliable [DJGPP Make crashing everytime trying to build it](http://matejhorvat.si/en/dos/allegwat/index.htm) read that convulted makefile.
+
+see CMakeLists.txt for more information to how to build it.
+
+## Warning!
+This CMakeLists.txt is really crude and full of hacks, but still more reliable than DJGPP Make known to be prone to crashing for some reason.
+
 Allegro 4.2.2 (DJGPP/DOS cross compiling)
 =========================================
 

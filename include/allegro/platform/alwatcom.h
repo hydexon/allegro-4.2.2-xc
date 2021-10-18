@@ -33,7 +33,7 @@
 #endif
 
 
-#pragma disable_message (120 201 202)
+/*#pragma disable_message (120 201 202)*/
 
 
 /* these are available in OpenWatcom 1.3 (12.3) */

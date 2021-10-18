@@ -4,15 +4,15 @@
 #include "demo.h"
 
 /* different ways to update the screen */
-typedef enum ANIMATION_TYPE ANIMATION_TYPE;
+/* typedef enum ANIMATION_TYPE ANIMATION_TYPE; */
 
-enum ANIMATION_TYPE
+typedef enum eANIMATION_TYPE
 {
    DOUBLE_BUFFER = 1,
    PAGE_FLIP,
    TRIPLE_BUFFER,
    DIRTY_RECTANGLE
-};
+} ANIMATION_TYPE;
 
 extern ANIMATION_TYPE animation_type;
 

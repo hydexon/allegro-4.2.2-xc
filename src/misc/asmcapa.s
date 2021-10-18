@@ -1,4 +1,3 @@
-# source file for testing assembler capabilities
 
 .text
 

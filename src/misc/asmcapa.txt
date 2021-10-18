@@ -1,0 +1,2 @@
+This comment was removed because OpenWatcom was complaining about thinking '# Source' was some sort of preprocessor token:
+# source file for testing assembler capabilities
