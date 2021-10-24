@@ -51,22 +51,64 @@ set_target_properties(asmdef PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE
 add_custom_command(TARGET asmdef POST_BUILD COMMAND ${DOSBOX-X_PATH} -silent -defaultdir "${DOSBOX-X_DEFPATH}" -c "asmdef obj\\watcom\\asmdef.inc & exit" "${CMAKE_SOURCE_DIR}")
 add_custom_target(ASM.Process COMMAND ${CMAKE_COMMAND} -DROOT_DIR=${CMAKE_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/cmake/process-asm.cmake WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} DEPENDS asmdef)
 
-
+set(OBJ_FILES
+    obj/watcom/asmcapa.o
+    obj/watcom/djirqs.o
+    obj/watcom/gripfnc.o
+    obj/watcom/iblit16.o
+    obj/watcom/iblit24.o
+    obj/watcom/iblit32.o
+    obj/watcom/iblit8.o
+    obj/watcom/icolconv.o
+    obj/watcom/icpus.o
+    obj/watcom/igfx15.o
+    obj/watcom/igfx16.o
+    obj/watcom/igfx24.o
+    obj/watcom/igfx32.o
+    obj/watcom/igfx8.o
+    obj/watcom/imisc.o
+    obj/watcom/iscan.o
+    obj/watcom/iscanmmx.o
+    obj/watcom/ispr15.o
+    obj/watcom/ispr16.o
+    obj/watcom/ispr24.o
+    obj/watcom/ispr32.o
+    obj/watcom/ispr8.o
+    obj/watcom/izbuf.o
+    obj/watcom/modexgfx.o
+    obj/watcom/swpps.o
+    obj/watcom/vbeafs.o
+    obj/watcom/vesas.o
+)
 file(GLOB OBJ_ASM ./obj/watcom/*.o)
+if(EXISTS objList.txt)
+    file(REMOVE objList.txt)
+endif()
 
 set(REAL_OBJ_ASM)
+set(LIST_OBJ)
 foreach(F IN LISTS OBJ_ASM) 
+    file(RELATIVE_PATH F ${CMAKE_SOURCE_DIR} ${F})
+    #message(${F})
+    #file(APPEND objList.txt "${F}\n")
+    #list(APPEND LIST_OBJ ${F})
     file(REAL_PATH ${F} F)
     file(TO_NATIVE_PATH ${F} F)
-    message(${F})
+    #message(${F})
     list(APPEND REAL_OBJ_ASM ${F})
 endforeach()
+
 
 add_custom_target(genasmlib COMMAND wlib ${CMAKE_BINARY_DIR}\\asmlib.lib ${REAL_OBJ_ASM})
 
 add_library(allegro STATIC ${ALLEGRO_SRC_FILES} ${ALLEGRO_SRC_DOS_FILES} ${ALLEGRO_SRC_I386_FILES} src/dos/wat.c)
 add_dependencies(allegro ASM.Process genasmlib)
-target_link_libraries(allegro)
+add_custom_command(TARGET allegro POST_BUILD COMMAND wlib /q /c $<TARGET_FILE:allegro> +${CMAKE_BINARY_DIR}\\asmlib.lib WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_executable(demo ${ALLEGRO_DEMO_SOURCES})
-target_link_libraries(demo allegro ${CMAKE_BINARY_DIR}\\asmlib.lib )
+target_link_libraries(demo allegro)
+
+file(GLOB SETUP_SRC setup/*.c)
+add_executable(setup ${SETUP_SRC})
+target_include_directories(setup PRIVATE setup/)
+target_link_libraries(setup allegro)
