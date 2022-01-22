@@ -72,9 +72,20 @@ AL_FUNCPTR(int, _al_trace_handler, (AL_CONST char *msg));
 #define _AL_FREE(PTR)            (_al_free(PTR))
 #define _AL_REALLOC(PTR, SIZE)   (_al_realloc(PTR, SIZE))
 
+//Scratchpad functions:
+#define _AL_SCRATCH_MALLOC(SIZE)         (_al_scratch_malloc(SIZE))
+#define _AL_SCRATCH_FREE(PTR)            (_al_scratch_free(PTR))
+#define _AL_SCRATCH_REALLOC(PTR, SIZE)   (_al_scratch_realloc(PTR, SIZE))
+
+
 AL_FUNC(void *, _al_malloc, (size_t size));
 AL_FUNC(void, _al_free, (void *mem));
 AL_FUNC(void *, _al_realloc, (void *mem, size_t size));
+
+AL_FUNC(void *, _al_scratch_malloc, (size_t size));
+AL_FUNC(void, _al_scratch_free, (void *mem));
+AL_FUNC(void *, _al_scratch_realloc, (void *mem, size_t size, char flag));
+
 
 
 
@@ -87,7 +98,7 @@ AL_INLINE(void, _grow_scratch_mem, (int size),
 {
    if (size > _scratch_mem_size) {
       size = (size+1023) & 0xFFFFFC00;
-      _scratch_mem = _AL_REALLOC(_scratch_mem, size);
+      _scratch_mem = _al_realloc(_scratch_mem, size);
       _scratch_mem_size = size;
    }
 })
