@@ -481,7 +481,7 @@ void allegro_exit(void)
    }
 
    if (_scratch_mem) {
-      _AL_FREE(_scratch_mem);
+      _AL_SCRATCH_FREE(_scratch_mem);
       _scratch_mem = NULL;
       _scratch_mem_size = 0;
    }

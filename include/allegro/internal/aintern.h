@@ -84,7 +84,7 @@ AL_FUNC(void *, _al_realloc, (void *mem, size_t size));
 
 AL_FUNC(void *, _al_scratch_malloc, (size_t size));
 AL_FUNC(void, _al_scratch_free, (void *mem));
-AL_FUNC(void *, _al_scratch_realloc, (void *mem, size_t size, char flag));
+AL_FUNC(void *, _al_scratch_realloc, (void *mem, size_t size));
 
 
 
@@ -96,9 +96,15 @@ AL_VAR(int, _scratch_mem_size);
 
 AL_INLINE(void, _grow_scratch_mem, (int size),
 {
+   if(_scratch_mem == NULL)
+   {
+      size = (size+1023) & 0xFFFFFC00;
+      _scratch_mem = _AL_SCRATCH_MALLOC(size);
+      _scratch_mem_size = size;
+   }
    if (size > _scratch_mem_size) {
       size = (size+1023) & 0xFFFFFC00;
-      _scratch_mem = _al_realloc(_scratch_mem, size);
+      _scratch_mem = _AL_SCRATCH_REALLOC(_scratch_mem, size);
       _scratch_mem_size = size;
    }
 })
